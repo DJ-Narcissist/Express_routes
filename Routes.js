@@ -29,16 +29,33 @@ app.get('/median', (res,req) => {
 });
 
 app.get('/mode', (res,req) => {
-    console
-})
+    const nums = req.query.nums.split(',').map(Number);
+    if (nums.length === 0){
+        return res.status(400).json({ error: 'No numbers provided'});
+    }
+    const numCount = {};
+    let maxCount = 0;
+    let mode =[];
+
+    for (const num of nums) {
+        if (!numCount[num]) {
+            numCount[num] = 1;
+        } else {
+            numCount[num]++;
+        }
+
+        if (numCount[num] > maxCount) {
+            maxCount = numCount[num];
+            mode = [num];
+        } else if (numCount[num] === maxCount){
+            mode.push(num);
+        }
+    }
+
+    res.json({mode});
+});
 
 
-
-app.post('/', (req,res) => {
-
-})
-
-
-app.listen(3000, ()=> {
+app.listen(3000, () => {
     console.log('Server is running on port 3000')
 });
